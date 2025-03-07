@@ -8,10 +8,12 @@ This tutorial demonstrates how to build a Cloudflare Worker that allows users to
 I want to create a Cloudflare Worker project for an image upload application. Let's set up a new project with the following steps:
 
 1. Create a new directory called "image-upload-worker"
-2. Initialize a new Cloudflare Worker project using Wrangler with TypeScript support
+2. Initialize a new Cloudflare Worker project, don't use "npm create cloudflare@latest" as this breaks your TTY apparently. Instead, create the needed files for a Worker project.
 3. Make sure our project structure is set up correctly for a Worker
 
 Use NPM as the package manager. If you need to install wrangler, please show the command but don't execute it as I'll handle that separately.
+
+Important: stick to only creating the files and folders needed, don't start implementing the API and adding dependencies. This will be done in later prompts. 
 ```
 
 ## Step 2: Adding Dependencies and Configuring R2
@@ -19,12 +21,11 @@ Use NPM as the package manager. If you need to install wrangler, please show the
 ```
 Now I need to add the necessary dependencies and configure R2 storage. Please:
 
-1. Add Hono as our web framework
-2. Configure an R2 bucket named "images-bucket" in the wrangler.toml file
-3. Add appropriate TypeScript types for our project
-4. Update any configuration files as needed
+1. Configure an R2 bucket named "images-bucket" in the wrangler.toml file
+2. Add appropriate TypeScript types for our project
+3. Update any configuration files as needed
 
-For R2 configuration, we'll need to create a bucket binding that our Worker can access.
+For R2 configuration, we'll need to create a bucket binding that our Worker can access. We'll work locally so please also include necessary configuration to fulfill that requirement.
 ```
 
 ## Step 3: Building the API
@@ -36,12 +37,17 @@ Let's build the Worker API using Hono. I need functionality to:
 2. Retrieve a list of all uploaded images
 3. Get a specific image by its key
 
-Please create the necessary endpoints:
+First, install Hono in our project. Create the base index.ts file that will contain the application code. 
+
+Then, please create the necessary endpoints:
 - POST /upload - for uploading images
 - GET /images - to list all images
 - GET /images/:key - to get a specific image
 
-Make sure to handle CORS properly to allow browser access, and include appropriate error handling.
+Make sure to handle CORS properly to allow browser access, and include appropriate error handling. To do so, use
+the included hono cors middleware in "hono/cors"
+
+Do not genrate any front-end for now, it will be tackled in the next prompt. 
 ```
 
 ## Step 4: Building the Frontend
@@ -55,6 +61,9 @@ Let's create a simple frontend for our application. I need:
 4. JavaScript to handle the API communication with our Worker
 
 The HTML file should be placed in the 'public' directory of our Worker project, and all JavaScript should be included directly in the HTML file for simplicity. Add an entry "assets" into the wrangler.toml file, with a sub property "directory" pointing to the assets folder, using a relative path. 
+
+
+Hono will take care of serving files matching that path automatically, so you don't have to change anything in the hono application's code. 
 ```
 
 ## Step 5: Testing
